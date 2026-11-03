@@ -79,19 +79,21 @@ https://drive.google.com/file/d/1iHyjKdqFm3bil2b0GIdTq8uLtHJbHawf/view?usp=shari
 #include <locale.h>
 #include <math.h>
 
-float area_triangle(float a, float b);
-void draw_triangle(int rows, char sym);
+float area_triangle(float height);
+void draw_triangle(int height, char sym);
 void print_definition();
-int get_sides_param(int rows);
 int compare_triangles(float area1, float area2);
+
 int main() {
     setlocale(LC_CTYPE, "RUS");
     int choice;
-    int size = 5;
+    int height = 5;
     char symbol = '*';
+
     printf("--- Программа для работы с геометрической фигурой ---\n");
-    printf("Текущая фигура: Прямоугольный равнобедренный треугольник\n");
-    printf("Размер катета (число строк) по умолчанию: %d\n\n", size);
+    printf("Текущая фигура: Равнобедренный треугольник\n");
+    printf("Высота по умолчанию: %d\n\n", height);
+
     do {
         printf("Выберите операцию из меню:\n");
         printf("1) Рассчитать площадь фигуры\n");
@@ -100,14 +102,16 @@ int main() {
         printf("4) Сравнить площадь текущей фигуры с другой\n");
         printf("0) Выход из программы\n");
         printf("Ваш выбор: ");
+
         if (scanf("%d", &choice) != 1) {
             printf("Ошибка ввода!\n");
             break;
         }
+
         switch (choice) {
         case 1: {
-            float area = area_triangle((float)size, (float)size);
-            printf("\nПлощадь треугольника с катетами %d и %d равна: %.2f\n\n", size, size, area);
+            float area = area_triangle((float)height);
+            printf("\nПлощадь равнобедренного треугольника (при угле при вершине 90°) с высотой %d равна: %.2f\n\n", height, area);
             break;
         }
         case 2:
@@ -116,18 +120,18 @@ int main() {
         case 3:
             printf("\nВведите символ для отрисовки фигуры (например, * или 5): ");
             scanf(" %c", &symbol);
-            printf("Введите размер катета (количество строк): ");
-            scanf("%d", &size);
+            printf("Введите высоту треугольника: ");
+            scanf("%d", &height);
             printf("\nРезультат отрисовки:\n");
-            draw_triangle(size, symbol);
+            draw_triangle(height, symbol);
             break;
         case 4: {
-            int other_size;
-            printf("\nВведите размер катета второго треугольника для сравнения: ");
-            scanf("%d", &other_size);
+            int other_height;
+            printf("\nВведите высоту второго треугольника для сравнения: ");
+            scanf("%d", &other_height);
 
-            float area1 = area_triangle((float)size, (float)size);
-            float area2 = area_triangle((float)other_size, (float)other_size);
+            float area1 = area_triangle((float)height);
+            float area2 = area_triangle((float)other_height);
 
             int diff = compare_triangles(area1, area2);
             if (diff > 0) {
@@ -148,36 +152,38 @@ int main() {
             printf("Неверный пункт меню! Попробуйте снова.\n\n");
         }
     } while (choice != 0);
+
     return 0;
 }
-// 1) Функция вычисления площади треугольника
-float area_triangle(float a, float b) {
-    return 0.5f * a * b;
+
+// 1) Функция вычисления площади треугольника через его высоту
+float area_triangle(float height) {
+    float base = 2.0f * height;
+    return 0.5f * base * height;
 }
+
 // 2) Функция вывода определения фигуры
 void print_definition() {
-    setlocale(LC_CTYPE, "RUS");
     printf("\nОпределение:\n");
-    printf("На изображении представлен прямоугольный равнобедренный треугольник.\n");
-    printf("Это треугольник, у которого один угол прямой (90 градусов), ");
-    printf("а два катета равны между собой.\n\n");
+    printf("Равнобедренный треугольник — это треугольник, у которого две стороны равны между собой.\n");
+    printf("Высота, опущенная на основание, делит его пополам и является биссектрисой и медианой.\n\n");
 }
-// 3) Функция рисования фигуры заданным символом
-void draw_triangle(int rows, char sym) {
-    setlocale(LC_CTYPE, "RUS");
-    for (int i = 1; i <= rows; i++) {
-        for (int j = 1; j <= i; j++) {
-            printf("%c ", sym);
+
+// 3) Функция рисования сплошного равнобедренного треугольника через пробелы и символы
+void draw_triangle(int height, char sym) {
+    for (int i = 1; i <= height; i++) {
+        for (int j = 1; j <= height - i; j++) {
+            printf(" ");
+        }
+        for (int j = 1; j <= (2 * i - 1); j++) {
+            printf("%c", sym);
         }
         printf("\n");
     }
     printf("\n");
 }
-// Функция вывода текущего параметра стороны
-int get_sides_param(int rows) {
-    return rows;
-}
-// 4) Функция сравнения двух фигур по площади (возвращает разницу знаков)
+
+// 4) Функция сравнения двух фигур по площади
 int compare_triangles(float area1, float area2) {
     if (area1 > area2) return 1;
     if (area1 < area2) return -1;
@@ -187,8 +193,8 @@ int compare_triangles(float area1, float area2) {
 # 3. Результат работы программы
 
 --- Программа для работы с геометрической фигурой ---
-Текущая фигура: Прямоугольный равнобедренный треугольник
-Размер катета (число строк) по умолчанию: 5
+Текущая фигура: Равнобедренный треугольник
+Высота по умолчанию: 5
 
 Выберите операцию из меню:
 1) Рассчитать площадь фигуры
@@ -198,7 +204,7 @@ int compare_triangles(float area1, float area2) {
 0) Выход из программы
 Ваш выбор: 1
 
-Площадь треугольника с катетами 5 и 5 равна: 12.50
+Площадь равнобедренного треугольника (при угле при вершине 90°) с высотой 5 равна: 25.00
 
 Выберите операцию из меню:
 1) Рассчитать площадь фигуры
@@ -209,8 +215,8 @@ int compare_triangles(float area1, float area2) {
 Ваш выбор: 2
 
 Определение:
-На изображении представлен прямоугольный равнобедренный треугольник.
-Это треугольник, у которого один угол прямой (90 градусов), а два катета равны между собой.
+Равнобедренный треугольник - это треугольник, у которого две стороны равны между собой.
+Высота, опущенная на основание, делит его пополам и является биссектрисой и медианой.
 
 Выберите операцию из меню:
 1) Рассчитать площадь фигуры
@@ -221,14 +227,14 @@ int compare_triangles(float area1, float area2) {
 Ваш выбор: 3
 
 Введите символ для отрисовки фигуры (например, * или 5): *
-Введите размер катета (количество строк): 5
+Введите высоту треугольника: 5
 
 Результат отрисовки:
-*
-* *
-* * *
-* * * *
-* * * * *
+    *
+   ***
+  *****
+ *******
+*********
 
 Выберите операцию из меню:
 1) Рассчитать площадь фигуры
@@ -238,8 +244,8 @@ int compare_triangles(float area1, float area2) {
 0) Выход из программы
 Ваш выбор: 4
 
-Введите размер катета второго треугольника для сравнения: 6
-Первый треугольник меньше второго по площади.
+Введите высоту второго треугольника для сравнения: 4
+Первый треугольник больше второго по площади.
 
 Выберите операцию из меню:
 1) Рассчитать площадь фигуры
@@ -250,7 +256,7 @@ int compare_triangles(float area1, float area2) {
 Ваш выбор: 0
 Выход из программы.
 
-C:\Users\Denis\source\repos\HW1\x64\Debug\HW10.exe (процесс 20840) завершил работу с кодом 0 (0x0).
+C:\Users\student\Downloads\HW10-main\HW10-main\HW10\x64\Debug\HW10.exe (процесс 8780) завершил работу с кодом 0 (0x0).
 Чтобы автоматически закрывать консоль при остановке отладки, включите параметр "Сервис" ->"Параметры" ->"Отладка" -> "Автоматически закрыть консоль при остановке отладки".
 Нажмите любую клавишу, чтобы закрыть это окно:
 
